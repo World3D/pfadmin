@@ -47,6 +47,7 @@ return array(
 		'actors',
 		'directors',
 		'theaters',
+		'Framework' => array('applications', 'packets'),
 		'Settings' => array('settings.site'),
 	),
 
