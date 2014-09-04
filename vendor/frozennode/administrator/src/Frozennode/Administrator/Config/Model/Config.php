@@ -40,6 +40,7 @@ class Config extends ConfigBase implements ConfigInterface {
 		'form_width' => 285,
 		'link' => null,
 		'rules' => false,
+		'before_save' => null, //add by viticm
 	);
 
 	/**
@@ -70,6 +71,7 @@ class Config extends ConfigBase implements ConfigInterface {
 		'form_width' => 'integer',
 		'link' => 'callable',
 		'rules' => 'array',
+		'before_save' => 'callable',
 	);
 
 	/**
@@ -300,6 +302,8 @@ class Config extends ConfigBase implements ConfigInterface {
 	 */
 	public function save(\Illuminate\Http\Request $input, array $fields, array $actionPermissions = null, $id = 0)
 	{
+		$datas = array(); //add by viticm(for before save)
+		$update = false;
 		$model = $this->getDataModel()->find($id);
 
 		//fetch the proper model so we don't have to deal with any extra attributes
@@ -311,6 +315,7 @@ class Config extends ConfigBase implements ConfigInterface {
 		//make sure the user has the proper permissions
 		if ($model->exists)
 		{
+			$update = true;
 			if (!$actionPermissions['update'])
 			{
 				return "You do not have permission to save this item";
@@ -319,6 +324,18 @@ class Config extends ConfigBase implements ConfigInterface {
 		else if (!$actionPermissions['update'] || !$actionPermissions['create'])
 		{
 			return "You do not have permission to create this item";
+		}
+		
+		//iterate over the edit fields to only fetch the important items
+		foreach ($fields as $name => $field)
+		{
+			$datas[$name] = $input->get($name);
+		
+			//make sure the bool field is set correctly
+			if ($field->getOption('type') === 'bool')
+			{
+				$datas[$name] = $datas[$name] === 'true' || $datas[$name] === '1' ? 1 : 0;
+			}
 		}
 
 		//fill the model with our input
@@ -332,6 +349,12 @@ class Config extends ConfigBase implements ConfigInterface {
 
 		//if a string was kicked back, it's an error, so return it
 		if (is_string($validation)) return $validation;
+		
+		//run the beforeSave function if provided
+		$beforeSave = $this->runBeforeSave($datas, $update);
+		
+		//if a string was kicked back, it's an error, so return it
+		if (is_string($beforeSave)) return $beforeSave;
 
 		//save the model
 		$model->save();
@@ -503,4 +526,30 @@ class Config extends ConfigBase implements ConfigInterface {
 			$filter($query);
 		}
 	}
+	
+	/**
+	 * Runs the before save method with the supplied data
+	 *
+	 * @param array		$data
+	 *
+	 * @param mixed
+	 */
+	public function runBeforeSave(array &$data, $update = false)
+	{
+		$beforeSave = $this->getOption('before_save');
+	
+		if (is_callable($beforeSave))
+		{
+			$bs = $beforeSave($data, $update);
+	
+			//if a string is returned, assume it's an error and kick it back
+			if (is_string($bs))
+			{
+				return $bs;
+			}
+		}
+	
+		return true;
+	}
+	
 }

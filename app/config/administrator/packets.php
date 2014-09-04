@@ -30,7 +30,7 @@ return array(
 		),
 		'public' => array(
 			'title' => 'Public',
-			'text' => 'SSSSSSSSSSSSSSSSSSSSSSSSS',
+			'select' => "IF((:table).public, 'yes', 'no')",
 		),
 	),
 
@@ -52,7 +52,7 @@ return array(
 		),
 		'public' => array(
 			'title' => 'Public',
-			'type' => 'bool'
+			'type' => 'bool',
 		),
 	),
 
@@ -75,7 +75,8 @@ return array(
 			'name_field' => 'name',
 		),
 		'data' => array(
-			'title' => 'Data'
+			'title' => 'Data',
+			'output' => 'datas',
 		),
 		'public' => array(
 			'title' => 'Public',

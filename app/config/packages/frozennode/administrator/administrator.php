@@ -1,5 +1,7 @@
 <?php
 
+//administrator docs: http://administrator.frozennode.com/
+
 return array(
 
 	/**
@@ -43,11 +45,11 @@ return array(
 	 *	)
 	 */
 	'menu' => array(
-		'Films' => array('films', 'boxoffice'),
-		'actors',
-		'directors',
-		'theaters',
-		'Framework' => array('applications', 'packets'),
+		//'Films' => array('films', 'boxoffice'),
+		//'actors',
+		//'directors',
+		//'theaters',
+		'Framework' => array('basepaths', 'applications', 'packets'),
 		'Settings' => array('settings.site'),
 	),
 
@@ -123,6 +125,6 @@ return array(
 	 *
 	 * @type array
 	 */
-	'locales' => array('en','zh-CN'),
+	'locales' => array('en', 'zh-CN'),
 
 );

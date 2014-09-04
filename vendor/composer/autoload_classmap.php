@@ -7,7 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Actor' => $baseDir . '/app/models/Actor.php',
+    'Application' => $baseDir . '/app/models/Application.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',
+    'BasePath' => $baseDir . '/app/models/BasePath.php',
     'Boris\\Boris' => $vendorDir . '/d11wtq/boris/lib/Boris/Boris.php',
     'Boris\\CLIOptionsHandler' => $vendorDir . '/d11wtq/boris/lib/Boris/CLIOptionsHandler.php',
     'Boris\\ColoredInspector' => $vendorDir . '/d11wtq/boris/lib/Boris/ColoredInspector.php',
@@ -33,11 +35,13 @@ return array(
     'CreateActors' => $baseDir . '/app/database/migrations/2012_11_20_222942_create_actors.php',
     'CreateActorsFilms' => $baseDir . '/app/database/migrations/2012_11_20_232343_create_actors_films.php',
     'CreateApplications' => $baseDir . '/app/database/migrations/2014_09_03_063232_create_applications.php',
+    'CreateBasepathsTable' => $baseDir . '/app/database/migrations/2014_09_04_033104_create_basepaths_table.php',
     'CreateBoxOffice' => $baseDir . '/app/database/migrations/2012_11_20_222938_create_box_office.php',
     'CreateDirectorsTable' => $baseDir . '/app/database/migrations/2012_11_13_023700_create_directors_table.php',
     'CreateFilmsTable' => $baseDir . '/app/database/migrations/2012_11_13_023705_create_films_table.php',
     'CreateFilmsTheaters' => $baseDir . '/app/database/migrations/2012_11_21_000526_create_films_theaters.php',
     'CreatePackets' => $baseDir . '/app/database/migrations/2014_09_03_032143_create_packets.php',
+    'CreatePathsTable' => $baseDir . '/app/database/migrations/2014_09_04_031541_create_paths_table.php',
     'CreateTheaters' => $baseDir . '/app/database/migrations/2012_11_21_000438_create_theaters.php',
     'Crypt_AES' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/AES.php',
     'Crypt_Base' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Base.php',
