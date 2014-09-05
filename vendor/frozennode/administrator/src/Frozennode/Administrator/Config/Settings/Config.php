@@ -24,6 +24,7 @@ class Config extends ConfigBase implements ConfigInterface {
 		'actions' => array(),
 		'rules' => array(),
 		'storage_path' => null,
+		'editdata' => false,
 	);
 
 	/**

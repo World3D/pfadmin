@@ -41,6 +41,7 @@ class Config extends ConfigBase implements ConfigInterface {
 		'link' => null,
 		'rules' => false,
 		'before_save' => null, //add by viticm
+		'editdata' => false,
 	);
 
 	/**

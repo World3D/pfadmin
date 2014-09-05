@@ -219,7 +219,9 @@
 			</div>
 		<!-- /ko -->
 	<!-- /ko -->
-
+	
+	<?php if ($config->getOption('editdata')) echo '<input type="button" id="edit_data" value="Edit Data">' ?>
+	
 	<!-- ko if: $root[$root.primaryKey]() && actions().length -->
 		<div class="custom_buttons">
 			<!-- ko foreach: actions -->

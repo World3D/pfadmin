@@ -8,7 +8,13 @@ editor: zend studio, tab size: 4.
 change the packet Laravel Administrator code: 
 	file: \Frozennode\Administrator\Config\Model\Config.php
 	changes: add before save config for it, same as settings config.
+	file: \Frozennode\Administrator\Config\Settings\Config.php views\templates\edit.php
+	changes: add a button for edit packet json data button, options add 'editdata'.
+
 cn:
-  ĞŞ¸ÄÁË¿ªÔ´°üLaravel AdministratorµÄ´úÂë
-  	ÎÄ¼ş£º\Frozennode\Administrator\Config\Model\Config.php
-  	¸Ä±äµÄÄÚÈİ£ºÔÚÅäÖÃÖĞÔö¼ÓÁËbefroe_saveÑ¡Ïî£¬ÈçsettingsµÄconfigÒ»Ñù¡£
+  æ›´æ”¹äº†Laravel Administrator
+  	æ–‡ä»¶ï¼š\Frozennode\Administrator\Config\Model\Config.php
+  	æ”¹å˜ï¼šå¢åŠ äº†ä¿å­˜å‰çš„å›è°ƒï¼Œå°±åƒsettingé…ç½®ä¸€æ ·
+  	file: \Frozennode\Administrator\Config\Settings\Config.php views\templates\edit.php
+  	æ”¹å˜ï¼šå¢åŠ äº†ä¸€ä¸ªç¼–è¾‘ç½‘ç»œåŒ…çš„jsonæ•°æ®æŒ‰é’®
+  	

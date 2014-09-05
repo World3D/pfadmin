@@ -2,6 +2,20 @@
 
 //administrator docs: http://administrator.frozennode.com/
 
+//plugin for mine
+View::composer('administrator::layouts.default', function($view)
+{
+	
+	$view->css += array(
+		'packet' => asset('packages/frozennode/administrator/css/packet.css'),
+	);
+	
+	$view->js += array(
+		'paket' => asset('packages/frozennode/administrator/js/packet.js'),
+	);
+	
+});
+
 return array(
 
 	/**
