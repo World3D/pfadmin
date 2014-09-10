@@ -10,13 +10,13 @@ function get_space_str(number) {
 	return str;
 }
 
-function appendhtml(id, typecount) {
+function appendhtml(id, index) {
 	var html = '';
 	var fourspace = get_space_str(4);
-	html += '<div id="packetdata_line' +typecount+ '">';
+	html += '<div id="packetdata_line' +index+ '">';
 	html += fourspace;
 	html += " type:&nbsp;&nbsp;"; 
-	html += "	<select id='packet_type" +typecount+ "'> ";
+	html += "	<select id='packet_type" +index+ "'> ";
 	html += "	<option value='1'>int8</option>";
 	html += "	<option value='2'>int16</option>";
 	html += "	<option value='3'>int32</option>";
@@ -30,13 +30,39 @@ function appendhtml(id, typecount) {
 	html += "	<option value='11'>string</option>";
 	html += "	</select>";
 	html += fourspace;
-	html += " name:&nbsp;&nbsp;<input type='text' id='packet_name" +typecount+ "'>";
+	html += " name:&nbsp;&nbsp;<input type='text' id='packet_name" +index+ "'>";
 	html += fourspace;
-	html += " size:&nbsp;&nbsp;<input type='text' id='packet_size" +typecount+ "'>";
-	html += '<input type="button" onclick="packet_delete(' +typecount+ ')" value="移除">';
+	html += " size:&nbsp;&nbsp;<input type='text' id='packet_size" +index+ "' onfocus='check_size(" +index+ ")'>";
+	html += '<input type="button" onclick="packet_delete(' +index+ ')" value="移除">';
 	html += '</div>';
 	$("#" +id).append(html);
-	$("#packet_jsonindex_max").attr('value', typecount); //why add one, index to count
+}
+
+function get_newindex() {
+	var result = 0;
+	var jsonindex = $("#packet_jsonindex_max").val();
+	for (var i = 0; i < jsonindex; ++i) {
+		var index = i;
+		var type = parseInt($('#packet_type' +index).val());
+		if (isNaN(type)) {
+			result = index;
+			break;
+		}
+		if (index + 1 == jsonindex) {
+			result = ++index;
+		}
+	}
+	return result;
+}
+
+function check_size(index) {
+	var typestr = $('#packet_type' +index+ ' option:selected').text();
+	if (typestr != 'string') {
+		alert('only string can input size');
+		$('#packet_name' +index).focus();
+		$('#packet_size' +index).val('');
+		return;
+	}
 }
 
 function get_init_html(jsonstr) {
@@ -45,7 +71,7 @@ function get_init_html(jsonstr) {
     html += '<form id="packet_form">';
     html += '<input type="hidden" value="0" id="packet_jsonindex_max">';
     html += '<div id="packetdatas_div">';
-    html += '<div>';
+    html += '<div id="packetdata_line0">';
     html += fourspace;
     html += " type:&nbsp;&nbsp;";
     html += '	<select id="packet_type0">';
@@ -64,7 +90,7 @@ function get_init_html(jsonstr) {
     html += fourspace;
     html += ' name:&nbsp;&nbsp;<input type="text" id="packet_name0" sytle="width: 20">';
     html += fourspace;
-    html += ' size:&nbsp;&nbsp;<input type="text" id="packet_size0">'
+    html += ' size:&nbsp;&nbsp;<input type="text" id="packet_size0" onfocus="check_size(0)">'
     html += '<input type="button" onclick="packet_addnew()" value="增加一行">';
     html += '</div>';
     html += '</div>';
@@ -76,7 +102,7 @@ function get_init_html(jsonstr) {
 function packet_addnew() {
 	var jsonindex = $("#packet_jsonindex_max").val();
 	$("#packet_jsonindex_max").attr('value', ++jsonindex);
-	appendhtml("packetdatas_div", jsonindex);
+	appendhtml("packetdatas_div", get_newindex());
 }
 
 function packet_delete(id) {
@@ -85,17 +111,31 @@ function packet_delete(id) {
 	$('#packetdata_line' +id).remove();
 }
 
+function in_array(needle, haystack) {
+	var result = false;
+	for (var i = 0; i < haystack.length; ++i) {
+		if (haystack[i] == needle) {
+			result = true;
+			break;
+		}
+	}
+	return result;
+}
+
 function packet_save() {
 	var formcount = parseInt($("#packet_jsonindex_max").val()) + 1;
 	var jsonarray = [];
+	var indexarray = [];
 	for (var i = 0; i < formcount; ++i) {
 		var item = [];
 		var index = i;
+		if (in_array(index, indexarray)) continue;
 		var type = parseInt($('#packet_type' +index).val());
 		while (isNaN(type)) {
 			++index;
 			type = parseInt($('#packet_type' +index).val());
 		}
+		indexarray.push(index);
 		var name = $('#packet_name' +index).val();
 		var size = parseInt($('#packet_size' +index).val());
 		var typename = $('#packet_type' +index+ ' option:selected').text();
@@ -135,6 +175,8 @@ $(document).ready( function(){
 			length = value.length;
 			var type = $('#packet_type' +index).val();
 	    	if (undefined == type) {
+	    		var jsonindex = $("#packet_jsonindex_max").val();
+	    		$("#packet_jsonindex_max").attr('value', ++jsonindex);
 	    		appendhtml('packetdatas_div', index);
 			}
 	    	$('#packet_type' +index).val(value[0]);
