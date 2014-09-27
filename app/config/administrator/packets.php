@@ -73,7 +73,7 @@ if (!function_exists('get_construct_implement'))
 			if ('string' === $typestr)
 			{
 				$str .= true === $autospace ? getspaces(4) : '';
-				$str .= 'memset(' .$val[1]. ', 0, sizeof(' .$val[1]. ');';
+				$str .= 'memset(' .$val[1]. '_, 0, sizeof(' .$val[1]. '_));';
 				$str .= $key === $lastkey ? '' : LF;
 				if (false === $autospace)
 				{
@@ -105,7 +105,7 @@ if (!function_exists('get_read_implement'))
 			$str .= 'string' === $typestr ? '' : $val[1]. '_ = ';
 			$str .= 'inputstream.read_' .$typestr. '(';
 			$str .= 'string' === $typestr ? $val[1]. '_' : '';
-			$str .= 'string' === $typestr ? ', sizeof(' .$val[1]. '));' : ');';
+			$str .= 'string' === $typestr ? ', sizeof(' .$val[1]. '_));' : ');';
 			$str .= $key === $lastkey ? '' : LF;
 		}
 		return $str;
@@ -129,7 +129,7 @@ if (!function_exists('get_write_implement'))
 			$typestr = get_packettype($val[0]);
 			$typestr = 'string' == $typestr ? $typestr : substr($typestr, 0, strlen($typestr) - 2);
 			$str .= 0 === $key ? '' : getspaces(4);
-			$str .= 'inputstream.write_' .$typestr. '(';
+			$str .= 'outputstream.write_' .$typestr. '(';
 			$str .= $val[1]. '_';
 			$str .= ');';
 			$str .= $key === $lastkey ? '' : LF;
@@ -363,7 +363,7 @@ if (!function_exists('get_functions_implement'))
 			$typestr = get_packettype($val[0]);
 			$str .= 'string' == $typestr ? 'const char *' : $typestr. ' ';
 			$str .= $classname. '::get_' .$val[1];
-			$str .= 'string' == $typestr ? '()' : '() const {';
+			$str .= 'string' == $typestr ? '() {' : '() const {';
 			$str .= LF;
 			$str .= getspaces(2).'return ' .$val[1]. '_;'.LF;
 			$str .= '}'.LF;
@@ -375,7 +375,7 @@ if (!function_exists('get_functions_implement'))
 			$str .= $val[1]. ') {'.LF;
 			$str .= getspaces(2);
 			$str .= 'string' == $typestr ? 'pf_base::string::safecopy(' .$val[1]. '_, ' .$val[1]. ', sizeof(' .$val[1]. '_))' : '';
-			$str .= 'string' == $typestr ? '' : $val[1]. '_ = ' .$val[1]. ';';
+			$str .= 'string' == $typestr ? ';' : $val[1]. '_ = ' .$val[1]. ';';
 			$str .= LF;
 			$str .= '}';
 			$str .= $key === $lastkey ? '' : LF.LF;
@@ -638,7 +638,7 @@ return array(
 				$filename = classname_tofilename($model->name);
 				$date = date('Y/m/d H:i');
 				$description = $model->description;
-				$module = get_modulename($from->name, $to->name, 1 === $model->public, $common);
+				$module = get_modulename($from->name, $to->name, 1 == $model->public, $common->path);
 				if (!$module)
 				{
 					return format_error('can\'t get module name');
@@ -667,7 +667,7 @@ return array(
 				$content_header = str_replace('${classname}', $classname, $content_header);
 				$content_header = str_replace('${functions}', $functions, $content_header);
 				$content_header = str_replace('${variables}', $variables, $content_header);
-				
+
 				if (!touch($headerfile)) 
 				{
 					return 'packet header file can\'t touch';
